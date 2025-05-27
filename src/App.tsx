@@ -7,7 +7,7 @@ import { Forecast } from './components/Forecast';
 import  type { WeatherData, ForecastData, TemperatureUnit } from './types/weather';
 import { Settings } from './components/Settings';
 
-const API_KEY = import.meta.env.VITE_WEATHER_API;
+const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
 const BASE_URL = 'https://api.openweathermap.org/data/2.5';
 
 function App() {
