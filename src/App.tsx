@@ -1,6 +1,7 @@
 import  { useState, useEffect } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
+import { MapPin } from 'lucide-react';
 import { SearchBar } from './components/Searchbar';
 import { WeatherCard } from './components/WeatherCard';
 import { Forecast } from './components/Forecast';
@@ -98,6 +99,23 @@ function App() {
     fetchWeatherByCity(city, unit);
   };
 
+  const [favorites, setFavorites] = useState<string[]>(() => {
+  const stored = localStorage.getItem('favoriteCities');
+  return stored ? JSON.parse(stored) : [];
+  });
+
+  const toggleFavorite = (city: string) => {
+  let updatedFavorites;
+  if (favorites.includes(city)) {
+    updatedFavorites = favorites.filter(c => c !== city);
+  } else {
+    updatedFavorites = [city, ...favorites.filter(c => c !== city)];
+  }
+
+  setFavorites(updatedFavorites);
+  localStorage.setItem('favoriteCities', JSON.stringify(updatedFavorites));
+};
+
   
 
 
@@ -156,8 +174,35 @@ function App() {
           </motion.div>
         )}
         
+        {favorites.length > 0 && (
+        <div className="flex flex-wrap gap-2 mb-6">
+        {favorites.length > 0 && (
+     <div className="flex flex-wrap gap-2 mt-4">
+        {favorites.map(city => (
+            <button 
+            key={city}
+            onClick={() => handleSearch(city)}
+            className="bg-white/30 hover:bg-white/50 text-white px-4 py-2 rounded-lg transition flex items-center"
+           >
+            <MapPin className="w-4 h-4 mr-2" /> {city}
+           </button>
+         ))}
+      </div>
+       )}
+
+         </div>
+      )}
+
         <div className="mt-8 flex flex-col gap-8 items-center justify-center">
-          {weather && <WeatherCard data={weather} unit={unit} />}
+          {weather && (
+          <WeatherCard 
+          data={weather} 
+          unit={unit} 
+          onFavorite={toggleFavorite}
+          isFavorite={favorites.includes(weather.name)}
+          />
+      )}
+
           {forecast && <Forecast data={forecast} unit={unit} />}
         </div>
         
