@@ -1,7 +1,7 @@
 import  { useState, useEffect } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
-import { MapPin } from 'lucide-react';
+import { MapPin, X } from 'lucide-react';
 import { SearchBar } from './components/Searchbar';
 import { WeatherCard } from './components/WeatherCard';
 import { Forecast } from './components/Forecast';
@@ -124,9 +124,9 @@ function App() {
   }, []);
 
   return (
-    <div className="min-h-screen w-full px-4 py-8 md:p-8 flex flex-col items-center bg-gradient-to-br from-blue-500 via-blue-400 to-blue-300">
+    <div className="min-h-screen w-full px-4 sm:px-6 lg:px-12 py-8 md:p-8 flex flex-col items-center bg-gradient-to-br from-blue-500 via-blue-400 to-blue-300">
       <div className="w-full max-w-7xl mx-auto">
-        <div className="flex flex-col sm:flex-row items-center gap-4 mb-8">
+        <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 flex-wrap w-full mb-8">
           <SearchBar 
             onSearch={handleSearch} 
             onLocationRequest={handleLocationRequest}
@@ -175,25 +175,35 @@ function App() {
         )}
         
         {favorites.length > 0 && (
-        <div className="flex flex-wrap gap-2 mb-6">
-          {favorites.length > 0 && (
-            <div className="flex flex-wrap gap-2 mt-4">
-               {favorites.map(city => (
-                <button 
-                key={city}
-                onClick={() => handleSearch(city)}
-                className="bg-white/30 hover:bg-white/50 text-white px-4 py-2 rounded-lg transition flex items-center"
-              >
-               <MapPin className="w-4 h-4 mr-2" /> {city}
-               </button>
-         ))}
-        </div>
-       )}
+            <div className="mt-4 flex flex-col gap-2 mb-6 items-center justify-center sm:justify-start">
+              <div className="flex flex-wrap gap-2 mt-4">
+                {favorites.map(city => (
+                  <div 
+                    key={city}
+                    className="relative flex items-center bg-white/30 hover:bg-white/50 text-white px-4 py-2 rounded-lg transition"
+                  >
+                    <button 
+                      onClick={() => handleSearch(city)}
+                      className="flex items-center focus:outline-none"
+                    >
+                      <MapPin className="w-4 h-4 mr-2" /> {city}
+                    </button>
 
-         </div>
-      )}
+                    {/* Close icon */}
+                    <button 
+                      onClick={() => toggleFavorite(city)}
+                      className="ml-2 p-1 hover:bg-white/30 rounded-full focus:outline-none"
+                      title="Remove favorite"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
-        <div className="mt-8 flex flex-col gap-8 items-center justify-center">
+        <div className="mt-8 flex flex-col md:flex-row flex-wrap gap-8 items-center">
           {weather && (
           <WeatherCard 
           data={weather} 
