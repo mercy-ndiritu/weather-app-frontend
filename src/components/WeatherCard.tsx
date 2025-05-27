@@ -15,23 +15,23 @@ export const WeatherCard: React.FC<WeatherCardProps> = ({ data, unit }) => {
   const getWeatherIcon = (condition: string) => {
     switch (condition.toLowerCase()) {
       case 'clear':
-        return <Sun className="w-12 h-12 sm:w-16 sm:h-16 text-yellow-300" />;
+        return <Sun className="w-8 h-8 text-yellow-400" />;
       case 'rain':
-        return <CloudRain className="w-12 h-12 sm:w-16 sm:h-16 text-blue-300" />;
+        return <CloudRain className="w-8 h-8 text-blue-400" />;
       case 'snow':
-        return <CloudSnow className="w-12 h-12 sm:w-16 sm:h-16 text-blue-100" />;
+        return <CloudSnow className="w-8 h-8 text-blue-200" />;
       case 'thunderstorm':
-        return <CloudLightning className="w-12 h-12 sm:w-16 sm:h-16 text-yellow-400" />;
+        return <CloudLightning className="w-8 h-8 text-yellow-400" />;
       case 'drizzle':
-        return <CloudDrizzle className="w-12 h-12 sm:w-16 sm:h-16 text-blue-200" />;
+        return <CloudDrizzle className="w-8 h-8 text-blue-300" />;
       default:
-        return <Cloud className="w-12 h-12 sm:w-16 sm:h-16 text-gray-200" />;
+        return <Cloud className="w-8 h-8 text-gray-400" />;
     }
   };
 
   const formatTime = (timestamp: number) => {
     return new Date(timestamp * 1000).toLocaleTimeString('en-US', {
-      hour: 'numeric',
+      hour: '2-digit',
       minute: '2-digit',
       hour12: true
     });
@@ -44,99 +44,86 @@ export const WeatherCard: React.FC<WeatherCardProps> = ({ data, unit }) => {
   };
 
   const getUnitSymbol = () => unit === 'celsius' ? '°C' : '°F';
-  const getSpeedUnit = () => unit === 'celsius' ? 'km/h' : 'mph';
+  const getSpeedUnit = () => unit === 'celsius' ? 'm/s' : 'mph';
 
   return (
     <motion.div
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="bg-white/20 backdrop-blur-md rounded-3xl p-4 sm:p-6 lg:p-8 text-white w-full max-w-sm lg:max-w-md"
+      className="bg-white/20 backdrop-blur-md rounded-xl shadow-lg p-6 text-white w-full max-w-4xl mx-auto"
     >
-      <div className="flex flex-col items-center">
-        <div className="flex items-center gap-2">
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold">{data.name}</h2>
-          <span className="text-lg sm:text-xl">{data.sys.country}</span>
+      {/* Header with city name and favorite icon */}
+      <div className="flex justify-between items-center mb-6">
+        <div>
+          <h2 className="text-2xl font-semibold text-white">{data.name}</h2>
+          <p className="text-white/80">{data.sys.country}</p>
         </div>
-        
-        <div className="mt-4 sm:mt-6 flex items-center justify-center w-full">
+        <button className="p-2 hover:bg-white/10 rounded-full transition-colors">
+          <svg className="w-5 h-5 text-white/70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+          </svg>
+        </button>
+      </div>
+
+      {/* Main weather info */}
+      <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center gap-4">
           {getWeatherIcon(data.weather[0].main)}
-          <div className="ml-4">
-            <span className="text-4xl sm:text-5xl lg:text-6xl font-light">
+          <div>
+            <span className="text-5xl font-light text-white">
               {Math.round(data.main.temp)}{getUnitSymbol()}
             </span>
-            <p className="text-lg sm:text-xl capitalize">{data.weather[0].description}</p>
+            <p className="text-lg text-white/80 capitalize mt-1">
+              {data.weather[0].description}
+            </p>
           </div>
         </div>
         
-        <div className="mt-6 sm:mt-8 grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4 w-full text-sm">
-          <div className="flex items-center gap-2">
-            <Thermometer className="w-4 h-4" />
-            <div>
-              <p className="opacity-70">Feels like</p>
-              <p className="font-semibold">{Math.round(data.main.feels_like)}{getUnitSymbol()}</p>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <Droplets className="w-4 h-4" />
-            <div>
-              <p className="opacity-70">Humidity</p>
-              <p className="font-semibold">{data.main.humidity}%</p>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <Wind className="w-4 h-4" />
-            <div>
-              <p className="opacity-70">Wind</p>
-              <p className="font-semibold">{Math.round(data.wind.speed)} {getSpeedUnit()}</p>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <Compass className="w-4 h-4" />
-            <div>
-              <p className="opacity-70">Direction</p>
-              <p className="font-semibold">{getWindDirection(data.wind.deg)}</p>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <Eye className="w-4 h-4" />
-            <div>
-              <p className="opacity-70">Visibility</p>
-              <p className="font-semibold">{(data.visibility / 1000).toFixed(1)} km</p>
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-2">
-            <Thermometer className="w-4 h-4" />
-            <div>
-              <p className="opacity-70">Min/Max</p>
-              <p className="font-semibold">
-                {Math.round(data.main.temp_min)}/{Math.round(data.main.temp_max)}{getUnitSymbol()}
-              </p>
-            </div>
-          </div>
+        <div className="text-right text-white/80">
+          <p className="text-sm">Feels like: <span className="font-medium text-white">{Math.round(data.main.feels_like)}{getUnitSymbol()}</span></p>
+          <p className="text-sm">Min: <span className="font-medium text-white">{Math.round(data.main.temp_min)}{getUnitSymbol()}</span> / Max: <span className="font-medium text-white">{Math.round(data.main.temp_max)}{getUnitSymbol()}</span></p>
         </div>
-        
-        <div className="mt-6 flex justify-between w-full text-sm border-t border-white/20 pt-4">
-          <div className="flex items-center gap-2">
+      </div>
+
+      {/* Weather details grid */}
+      <div className="grid grid-cols-4 gap-4">
+        <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <Droplets className="w-4 h-4 text-blue-300" />
+            <span className="text-sm text-white/80">Humidity</span>
+          </div>
+          <p className="text-xl font-semibold text-white">{data.main.humidity}%</p>
+        </div>
+
+        <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+          <div className="flex items-center gap-2 mb-2">
+            <Wind className="w-4 h-4 text-white/70" />
+            <span className="text-sm text-white/80">Wind</span>
+          </div>
+          <p className="text-xl font-semibold text-white">
+            {data.wind.speed.toFixed(2)} {getSpeedUnit()}
+          </p>
+        </div>
+
+        <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+          <div className="flex items-center gap-2 mb-2">
             <Sunrise className="w-4 h-4 text-yellow-300" />
-            <div>
-              <p className="opacity-70">Sunrise</p>
-              <p className="font-semibold">{formatTime(data.sys.sunrise)}</p>
-            </div>
+            <span className="text-sm text-white/80">Sunrise</span>
           </div>
-          
-          <div className="flex items-center gap-2">
+          <p className="text-xl font-semibold text-white">
+            {formatTime(data.sys.sunrise)}
+          </p>
+        </div>
+
+        <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
+          <div className="flex items-center gap-2 mb-2">
             <Sunset className="w-4 h-4 text-orange-300" />
-            <div>
-              <p className="opacity-70">Sunset</p>
-              <p className="font-semibold">{formatTime(data.sys.sunset)}</p>
-            </div>
+            <span className="text-sm text-white/80">Sunset</span>
           </div>
+          <p className="text-xl font-semibold text-white">
+            {formatTime(data.sys.sunset)}
+          </p>
         </div>
       </div>
     </motion.div>

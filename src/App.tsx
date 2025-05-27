@@ -98,6 +98,9 @@ function App() {
     fetchWeatherByCity(city, unit);
   };
 
+  
+
+
   useEffect(() => {
     handleLocationRequest();
   }, []);
@@ -153,7 +156,7 @@ function App() {
           </motion.div>
         )}
         
-        <div className="mt-8 flex flex-col lg:flex-row gap-8 items-center lg:items-start justify-center">
+        <div className="mt-8 flex flex-col gap-8 items-center justify-center">
           {weather && <WeatherCard data={weather} unit={unit} />}
           {forecast && <Forecast data={forecast} unit={unit} />}
         </div>
