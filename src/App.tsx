@@ -176,18 +176,18 @@ function App() {
         
         {favorites.length > 0 && (
         <div className="flex flex-wrap gap-2 mb-6">
-        {favorites.length > 0 && (
-     <div className="flex flex-wrap gap-2 mt-4">
-        {favorites.map(city => (
-            <button 
-            key={city}
-            onClick={() => handleSearch(city)}
-            className="bg-white/30 hover:bg-white/50 text-white px-4 py-2 rounded-lg transition flex items-center"
-           >
-            <MapPin className="w-4 h-4 mr-2" /> {city}
-           </button>
+          {favorites.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-4">
+               {favorites.map(city => (
+                <button 
+                key={city}
+                onClick={() => handleSearch(city)}
+                className="bg-white/30 hover:bg-white/50 text-white px-4 py-2 rounded-lg transition flex items-center"
+              >
+               <MapPin className="w-4 h-4 mr-2" /> {city}
+               </button>
          ))}
-      </div>
+        </div>
        )}
 
          </div>
