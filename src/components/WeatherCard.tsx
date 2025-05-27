@@ -19,9 +19,9 @@ export const WeatherCard: React.FC<WeatherProps> = ({ data, unit, onFavorite, is
       case 'clear':
         return <Sun className="w-8 h-8 text-yellow-400" />;
       case 'rain':
-        return <CloudRain className="w-8 h-8 text-blue-400" />;
+        return <CloudRain className="w-8 h-8 text-blue-600" />;
       case 'snow':
-        return <CloudSnow className="w-8 h-8 text-blue-200" />;
+        return <CloudSnow className="w-8 h-8 text-blue-400" />;
       case 'thunderstorm':
         return <CloudLightning className="w-8 h-8 text-yellow-400" />;
       case 'drizzle':
@@ -106,7 +106,7 @@ export const WeatherCard: React.FC<WeatherProps> = ({ data, unit, onFavorite, is
       <div className="grid grid-cols-4 gap-4">
         <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
           <div className="flex items-center gap-2 mb-2">
-            <Droplets className="w-4 h-4 text-blue-300" />
+            <Droplets className="w-4 h-4 text-blue-500" />
             <span className="text-sm text-white/80">Humidity</span>
           </div>
           <p className="text-xl font-semibold text-white">{data.main.humidity}%</p>
@@ -114,7 +114,7 @@ export const WeatherCard: React.FC<WeatherProps> = ({ data, unit, onFavorite, is
 
         <div className="bg-white/10 backdrop-blur-sm rounded-lg p-4">
           <div className="flex items-center gap-2 mb-2">
-            <Wind className="w-4 h-4 text-white/70" />
+            <Wind className="w-4 h-4 text-white/80" />
             <span className="text-sm text-white/80">Wind</span>
           </div>
           <p className="text-xl font-semibold text-white">

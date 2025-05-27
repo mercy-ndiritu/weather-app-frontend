@@ -13,16 +13,23 @@ export const Forecast: React.FC<ForecastProps> = ({ data, unit }) => {
     return new Date(timestamp * 1000).toLocaleDateString('en-US', { weekday: 'long' });
   };
 
+  const getDateString = (timestamp: number) => {
+    return new Date(timestamp * 1000).toLocaleDateString('en-US', { 
+      month: 'short', 
+      day: 'numeric' 
+    });
+  };
+
   const getWeatherIcon = (condition: string) => {
     switch (condition.toLowerCase()) {
       case 'clear':
         return <Sun className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-300" />;
       case 'rain':
-        return <CloudRain className="w-6 h-6 sm:w-8 sm:h-8 text-blue-300" />;
+        return <CloudRain className="w-6 h-6 sm:w-8 sm:h-8 text-blue-400" />;
       case 'snow':
-        return <CloudSnow className="w-6 h-6 sm:w-8 sm:h-8 text-blue-100" />;
+        return <CloudSnow className="w-6 h-6 sm:w-8 sm:h-8 text-blue-200" />;
       case 'thunderstorm':
-        return <CloudLightning className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-400" />;
+        return <CloudLightning className="w-6 h-6 sm:w-8 sm:h-8 text-yellow-300" />;
       case 'drizzle':
         return <CloudDrizzle className="w-6 h-6 sm:w-8 sm:h-8 text-blue-200" />;
       default:
@@ -79,17 +86,20 @@ export const Forecast: React.FC<ForecastProps> = ({ data, unit }) => {
             transition={{ duration: 0.3, delay: index * 0.1 }}
             className="bg-white/20 backdrop-blur-md rounded-xl p-3 sm:p-4 flex flex-col items-center text-white"
           >
-            <p className="text-xs sm:text-sm mb-2">{getDayName(forecast.dt)}</p>
+            <div className="text-center mb-2">
+              <p className="text-xs sm:text-sm font-medium">{getDayName(forecast.dt)}</p>
+              <p className="text-xs opacity-75">{getDateString(forecast.dt)}</p>
+            </div>
             {getWeatherIcon(forecast.weather[0].main)}
             <p className="text-base sm:text-lg mt-2">{Math.round(forecast.main.temp)}{getUnitSymbol()}</p>
             
             <div className="mt-2 flex justify-between w-full text-xs opacity-70">
               <div className="flex items-center">
-                <Droplets className="w-3 h-3 mr-1" />
+                <Droplets className="w-3 h-3 mr-1 text-blue-500" />
                 {forecast.main.humidity}%
               </div>
               <div className="flex items-center">
-                <Wind className="w-3 h-3 mr-1" />
+                <Wind className="w-3 h-3 mr-1 text-white/90" />
                 {Math.round(forecast.wind.speed)} {getSpeedUnit()}
               </div>
             </div>
