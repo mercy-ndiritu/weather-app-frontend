@@ -8,8 +8,7 @@ import { Forecast } from './components/Forecast';
 import  type { WeatherData, ForecastData, TemperatureUnit } from './types/weather';
 import { Settings } from './components/Settings';
 
-const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
-const BASE_URL = 'https://api.openweathermap.org/data/2.5';
+const BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api';
 
 function App() {
   const [weather, setWeather] = useState<WeatherData | null>(null);
@@ -27,8 +26,12 @@ function App() {
       setError('');
       const unitParam = getUnitParam(selectedUnit);
       const [weatherRes, forecastRes] = await Promise.all([
-        axios.get(`${BASE_URL}/weather?lat=${lat}&lon=${lon}&units=${unitParam}&appid=${API_KEY}`),
-        axios.get(`${BASE_URL}/forecast?lat=${lat}&lon=${lon}&units=${unitParam}&appid=${API_KEY}`)
+        axios.get(`${BASE_URL}/weather/current/coordinates`, {
+          params: { lat, lon, units: unitParam }
+        }),
+        axios.get(`${BASE_URL}/weather/forecast/coordinates`, {
+          params: { lat, lon, units: unitParam }
+        })
       ]);
       
       setWeather(weatherRes.data);
@@ -49,8 +52,12 @@ function App() {
       setLastSearchedCity(city);
       const unitParam = getUnitParam(selectedUnit);
       const [weatherRes, forecastRes] = await Promise.all([
-        axios.get(`${BASE_URL}/weather?q=${city}&units=${unitParam}&appid=${API_KEY}`),
-        axios.get(`${BASE_URL}/forecast?q=${city}&units=${unitParam}&appid=${API_KEY}`)
+        axios.get(`${BASE_URL}/weather/current/${encodeURIComponent(city)}`, {
+          params: { units: unitParam }
+        }),
+        axios.get(`${BASE_URL}/weather/forecast/${encodeURIComponent(city)}`, {
+          params: { units: unitParam }
+        })
       ]);
       
       setWeather(weatherRes.data);
